@@ -41,7 +41,7 @@ def _device_info(hass, entry_id):
     rev = d.get("BoardRev")
     return DeviceInfo(
         identifiers={(DOMAIN, entry_id)},
-        name="Pulse-Eight Neo Matrix",
+        name="Pulse-Eight Neo",
         manufacturer="Pulse-Eight",
         model=d.get("Model"),
         sw_version=d.get("Version"),

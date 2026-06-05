@@ -40,7 +40,7 @@ class RebootButton(ButtonEntity):
         rev = d.get("BoardRev")
         return DeviceInfo(
             identifiers={(DOMAIN, self._entry_id)},
-            name="Pulse-Eight Neo Matrix",
+            name="Pulse-Eight Neo",
             manufacturer="Pulse-Eight",
             model=d.get("Model"),
             sw_version=d.get("Version"),

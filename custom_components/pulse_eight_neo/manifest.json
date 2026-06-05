@@ -1,6 +1,6 @@
 {
   "domain": "pulse_eight_neo",
-  "name": "Pulse-Eight Neo Matrix",
+  "name": "Pulse-Eight Neo",
   "codeowners": [],
   "config_flow": true,
   "documentation": "https://github.com/morgan/ha-neo-pulseeight",
