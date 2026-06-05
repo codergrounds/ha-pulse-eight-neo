@@ -20,8 +20,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     entities = [MatrixAvailabilitySensor(coordinator, entry.entry_id)]
 
     for port in coordinator.data["ports"]:
-        if port.get("Mode") == "Input":
-            entities.append(InputSignalSensor(coordinator, entry.entry_id, port["Bay"]))
+        mode = port.get("Mode")
+        bay = port["Bay"]
+        if mode == "Input":
+            entities.append(InputSignalSensor(coordinator, entry.entry_id, bay))
+        elif mode == "Output":
+            entities.append(OutputConnectedSensor(coordinator, entry.entry_id, bay))
 
     async_add_entities(entities)
 
@@ -93,6 +97,46 @@ class InputSignalSensor(CoordinatorEntity, BinarySensorEntity):
     def available(self):
         p = self._port()
         return p is not None and p.get("HasSignal") is not None
+
+    @property
+    def device_info(self):
+        return _device_info(self.hass, self._entry_id)
+
+
+class OutputConnectedSensor(CoordinatorEntity, BinarySensorEntity):
+
+    _attr_device_class = BinarySensorDeviceClass.CONNECTIVITY
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+
+    def __init__(self, coordinator, entry_id, bay):
+        super().__init__(coordinator)
+        self._entry_id = entry_id
+        self._bay = bay
+        self._attr_unique_id = f"{entry_id}_output_{bay}_connected"
+
+    def _port(self):
+        for p in self.coordinator.data["ports"]:
+            if p.get("Mode") == "Output" and p.get("Bay") == self._bay:
+                return p
+        return None
+
+    @property
+    def name(self):
+        p = self._port()
+        label = p.get("Name") if p else f"Output {self._bay + 1}"
+        return f"{label} Connected"
+
+    @property
+    def is_on(self):
+        p = self._port()
+        if not p or p.get("HPD") is None:
+            return None
+        return bool(p["HPD"])
+
+    @property
+    def available(self):
+        p = self._port()
+        return p is not None and p.get("HPD") is not None
 
     @property
     def device_info(self):

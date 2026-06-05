@@ -40,8 +40,10 @@ class PulseEightDataUpdateCoordinator(DataUpdateCoordinator):
                         try:
                             details = await self.api.get_port_details("Output", bay)
                             port["FirmwareVersion"] = details.get("FirmwareVersion")
+                            port["HPD"] = details.get("HPD")
                         except Exception:
                             port["FirmwareVersion"] = None
+                            port["HPD"] = None
 
                     elif mode == "Input":
                         try:
