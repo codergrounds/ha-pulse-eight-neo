@@ -23,7 +23,7 @@ Tested on a neo:4 but should work fine on other Neo matrix models since they all
 ### HACS (recommended)
 
 1. In HACS, go to the three-dot menu (top right) and click **Custom repositories**
-2. Paste `https://github.com/codergrounds/ha-neo-pulseeight` and set the category to **Integration**, then click Add
+2. Paste `https://github.com/codergrounds/ha-pulse-eight-neo/` and set the category to **Integration**, then click Add
 3. Search for "Pulse-Eight Neo" in HACS and install it
 4. Restart Home Assistant
 5. Go to Settings → Integrations → Add Integration → search for "Pulse-Eight Neo"
