@@ -9,7 +9,10 @@ Tested on a neo:4 but should work fine on other Neo matrix models since they all
 - Dropdown selector per output to switch sources
 - Diagnostic sensors (system status, PSU, temperature, uptime, input/output module health)
 - TX firmware version per output port
-- Network connectivity sensor
+- Input signal detection binary sensors (HDMI signal active check)
+- Output connection binary sensors (Hot Plug Detect/HPD check)
+- Matrix network availability binary sensor
+- Configurable polling interval via Integration Options (Configure button)
 - Reboot button
 
 ## Requirements
@@ -48,18 +51,21 @@ The integration will pull the model and serial from the device and create the en
 | Inputs Health | Sensor | Input module status |
 | Outputs Health | Sensor | Output module status |
 | Temperature | Sensor | Internal temperature in °C |
-| Uptime | Sensor | Seconds since last boot |
-| Network Connectivity | Sensor | Online/Disconnected based on poll success |
+| Uptime | Sensor | Seconds since last boot, includes a `last_boot` ISO timestamp attribute |
+| Matrix Available | Binary Sensor | Online/Disconnected based on poll success |
+| Input N Signal | Binary Sensor | Active HDMI signal check (plug class) |
+| Output N Connected | Binary Sensor | Display connection check via Hot Plug Detect (connectivity class) |
 | Output N TX Firmware | Sensor | HDBaseT transmitter firmware per output |
 | Reboot System | Button | Sends a reboot command to the matrix |
 
 ## Notes
 
-- The matrix is polled every 10 seconds
+- The matrix is polled every 10 seconds by default, but this can be adjusted from 5 to 300 seconds in the integration settings (Configure button)
 - Input/output names shown in the dropdowns come directly from the matrix
 - If you rename an input and have automations using `select.select_option` with the old name, those will need updating
 - The reboot button works and actually reboots the matrix, so don't press it by accident
 
 ## License
 
-MIT
+GPLv3
+
