@@ -1,0 +1,22 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Pulse-Eight Neo Matrix Configuration",
+        "description": "Please enter the network details of your Pulse-Eight Neo HDMI matrix switcher.",
+        "data": {
+          "host": "IP Address or Hostname",
+          "port": "HTTP Port"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to the matrix switcher. Check the IP and connection.",
+      "api_error": "The matrix switcher API returned an error response.",
+      "unknown": "An unexpected error occurred."
+    },
+    "abort": {
+      "already_configured": "This matrix switcher is already configured in Home Assistant."
+    }
+  }
+}

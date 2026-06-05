@@ -1,0 +1,9 @@
+{
+  "domain": "pulse_eight_neo",
+  "name": "Pulse-Eight Neo Matrix",
+  "codeowners": [],
+  "config_flow": true,
+  "documentation": "https://github.com/morgan/ha-neo-pulseeight",
+  "iot_class": "local_polling",
+  "version": "1.0.0"
+}

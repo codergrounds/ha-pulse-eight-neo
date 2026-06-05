@@ -1,0 +1,3 @@
+DOMAIN = "pulse_eight_neo"
+DEFAULT_PORT = 80
+DEFAULT_POLL_INTERVAL = 10

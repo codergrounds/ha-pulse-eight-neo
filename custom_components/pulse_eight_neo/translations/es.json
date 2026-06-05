@@ -1,0 +1,22 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configuración de la matriz Pulse-Eight Neo",
+        "description": "Por favor, introduzca los detalles de red de su conmutador de matriz HDMI Pulse-Eight Neo.",
+        "data": {
+          "host": "Dirección IP o nombre de host",
+          "port": "Puerto HTTP"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Error al conectar con el conmutador de matriz. Compruebe la IP y la conexión.",
+      "api_error": "La API del conmutador de matriz devolvió una respuesta de error.",
+      "unknown": "Ocurrió un error inesperado."
+    },
+    "abort": {
+      "already_configured": "Este conmutador de matriz ya está configurado en Home Assistant."
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Pulse-Eight Neo Matrix Konfiguration",
+        "description": "Bitte geben Sie die Netzwerkdetails Ihres Pulse-Eight Neo HDMI-Matrix-Umschalters ein.",
+        "data": {
+          "host": "IP-Adresse oder Hostname",
+          "port": "HTTP-Port"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung zum Matrix-Umschalter fehlgeschlagen. Überprüfen Sie IP und Verbindung.",
+      "api_error": "Die API des Matrix-Umschalters hat eine Fehlermeldung zurückgegeben.",
+      "unknown": "Ein unerwarteter Fehler ist aufgetreten."
+    },
+    "abort": {
+      "already_configured": "Dieser Matrix-Umschalter ist in Home Assistant bereits konfiguriert."
+    }
+  }
+}
