@@ -96,7 +96,13 @@ class PulseEightOutputSourceSelect(CoordinatorEntity, SelectEntity):
 
         try:
             await self.api.set_port_routing(input_bay, self._bay)
-            await self.coordinator.async_request_refresh()
+            ports = self.coordinator.data["ports"]
+            for port in ports:
+                if port.get("Mode") == "Output" and port.get("Bay") == self._bay:
+                    port["ReceiveFrom"] = input_bay
+                    break
+            self.coordinator.async_set_updated_data({**self.coordinator.data, "ports": ports})
+
         except Exception as e:
             _LOGGER.error("Routing failed for %s: %s", self.name, e)
 
