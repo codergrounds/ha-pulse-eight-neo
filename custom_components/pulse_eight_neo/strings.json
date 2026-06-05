@@ -5,7 +5,7 @@
         "title": "Pulse-Eight Neo Matrix Configuration",
         "description": "Please enter the network details of your Pulse-Eight Neo HDMI matrix switcher.",
         "data": {
-          "host": "IP Address or Hostname",
+          "host": "IP Address (static recommended) or Hostname",
           "port": "HTTP Port"
         }
       }
