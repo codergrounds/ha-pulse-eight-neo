@@ -1,0 +1,37 @@
+name: Update Manifest Version on Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          # Check out the branch the release was targeted at (usually main/master)
+          ref: ${{ github.event.release.target_commitish }}
+
+      - name: Update manifest.json
+        run: |
+          # Extract the tag name (e.g. v1.2.3 or 1.2.3)
+          TAG_NAME="${{ github.event.release.tag_name }}"
+          # Strip leading 'v' if present
+          VERSION="${TAG_NAME#v}"
+          
+          # Update the version field in manifest.json
+          jq --arg ver "$VERSION" '.version = $ver' custom_components/pulse_eight_neo/manifest.json > tmp.json
+          mv tmp.json custom_components/pulse_eight_neo/manifest.json
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add custom_components/pulse_eight_neo/manifest.json
+          git commit -m "chore: update manifest.json to $TAG_NAME [skip ci]"
+          git push
