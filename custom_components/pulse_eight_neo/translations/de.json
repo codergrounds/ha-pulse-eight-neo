@@ -18,5 +18,15 @@
     "abort": {
       "already_configured": "Dieser Matrix-Umschalter ist in Home Assistant bereits konfiguriert."
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Pulse-Eight Neo Optionen",
+        "data": {
+          "poll_interval": "Abfrageintervall (Sekunden)"
+        }
+      }
+    }
   }
 }

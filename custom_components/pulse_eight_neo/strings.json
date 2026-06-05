@@ -18,5 +18,15 @@
     "abort": {
       "already_configured": "This matrix switcher is already configured in Home Assistant."
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Pulse-Eight Neo Options",
+        "data": {
+          "poll_interval": "Poll Interval (seconds)"
+        }
+      }
+    }
   }
 }

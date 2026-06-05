@@ -1,3 +1,4 @@
+from datetime import timedelta
 import logging
 
 from homeassistant.components.sensor import SensorDeviceClass, SensorEntity, SensorStateClass
@@ -7,6 +8,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.util import dt as dt_util
 
 from .const import DOMAIN
 
@@ -24,9 +26,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
         HealthSensor(coordinator, entry.entry_id, "outputs_health", "Outputs Health",  "OutputModulesMessage",None, None),
         HealthSensor(coordinator, entry.entry_id, "temperature",    "Temperature",     "Temperature0",
                      SensorDeviceClass.TEMPERATURE, UnitOfTemperature.CELSIUS, SensorStateClass.MEASUREMENT),
-        HealthSensor(coordinator, entry.entry_id, "uptime",         "Uptime",          "Uptime",
-                     SensorDeviceClass.DURATION, "s"),
-        NetworkSensor(coordinator, entry.entry_id),
+        UptimeSensor(coordinator, entry.entry_id),
     ]
 
     for port in coordinator.data["ports"]:
@@ -74,18 +74,42 @@ class HealthSensor(CoordinatorEntity, SensorEntity):
         return _device_info(self.hass, self._entry_id)
 
 
-class NetworkSensor(CoordinatorEntity, SensorEntity):
+class UptimeSensor(CoordinatorEntity, SensorEntity):
+
+    _attr_device_class = SensorDeviceClass.DURATION
+    _attr_native_unit_of_measurement = "s"
+    _attr_state_class = SensorStateClass.TOTAL_INCREASING
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
 
     def __init__(self, coordinator, entry_id):
         super().__init__(coordinator)
         self._entry_id = entry_id
-        self._attr_unique_id = f"{entry_id}_sensor_network_connectivity"
-        self._attr_name = "Network Connectivity"
-        self._attr_entity_category = EntityCategory.DIAGNOSTIC
+        self._attr_unique_id = f"{entry_id}_sensor_uptime"
+        self._attr_name = "Uptime"
+        self._prev = None
+        self._last_boot = None
 
     @property
     def native_value(self):
-        return "Online" if self.coordinator.last_update_success else "Disconnected"
+        uptime = self.coordinator.data.get("health", {}).get("Uptime")
+        if uptime is None:
+            return None
+
+        now = dt_util.utcnow()
+        if self._last_boot is None:
+            self._last_boot = now - timedelta(seconds=int(uptime))
+        elif self._prev is not None and uptime < self._prev:
+            _LOGGER.info("Pulse-Eight Neo rebooted, resetting uptime tracking")
+            self._last_boot = now
+
+        self._prev = uptime
+        return uptime
+
+    @property
+    def extra_state_attributes(self):
+        if self._last_boot:
+            return {"last_boot": self._last_boot.isoformat()}
+        return {}
 
     @property
     def device_info(self):

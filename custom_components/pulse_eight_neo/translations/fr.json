@@ -18,5 +18,15 @@
     "abort": {
       "already_configured": "Cette matrice est déjà configurée dans Home Assistant."
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options Pulse-Eight Neo",
+        "data": {
+          "poll_interval": "Intervalle de sondage (secondes)"
+        }
+      }
+    }
   }
 }

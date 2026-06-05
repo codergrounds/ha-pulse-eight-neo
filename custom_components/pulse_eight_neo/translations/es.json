@@ -18,5 +18,15 @@
     "abort": {
       "already_configured": "Este conmutador de matriz ya está configurado en Home Assistant."
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opciones de Pulse-Eight Neo",
+        "data": {
+          "poll_interval": "Intervalo de sondeo (segundos)"
+        }
+      }
+    }
   }
 }
