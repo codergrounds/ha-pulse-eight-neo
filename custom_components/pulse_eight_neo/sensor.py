@@ -29,10 +29,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
         UptimeSensor(coordinator, entry.entry_id),
     ]
 
-    for port in coordinator.data["ports"]:
-        if port.get("Mode") == "Output":
-            entities.append(TxFirmwareSensor(coordinator, entry.entry_id, port["Bay"]))
-
     async_add_entities(entities)
 
 
@@ -115,36 +111,3 @@ class UptimeSensor(CoordinatorEntity, SensorEntity):
     def device_info(self):
         return _device_info(self.hass, self._entry_id)
 
-
-class TxFirmwareSensor(CoordinatorEntity, SensorEntity):
-
-    def __init__(self, coordinator, entry_id, bay):
-        super().__init__(coordinator)
-        self._entry_id = entry_id
-        self._bay = bay
-        self._attr_unique_id = f"{entry_id}_output_{bay}_tx_firmware"
-        self._attr_entity_category = EntityCategory.DIAGNOSTIC
-
-    def _port(self):
-        for p in self.coordinator.data["ports"]:
-            if p.get("Mode") == "Output" and p.get("Bay") == self._bay:
-                return p
-        return None
-
-    @property
-    def name(self):
-        p = self._port()
-        label = p.get("Name") if p else f"Output {self._bay + 1}"
-        return f"{label} TX Firmware"
-
-    @property
-    def native_value(self):
-        p = self._port()
-        if not p:
-            return None
-        fw = p.get("FirmwareVersion", "")
-        return fw.split()[0] if fw else None
-
-    @property
-    def device_info(self):
-        return _device_info(self.hass, self._entry_id)

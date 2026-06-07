@@ -10,6 +10,8 @@ permissions:
 jobs:
   update-version:
     runs-on: ubuntu-latest
+    env:
+      TAG_NAME: ${{ github.event.release.tag_name }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -19,11 +21,9 @@ jobs:
 
       - name: Update manifest.json
         run: |
-          # Extract the tag name (e.g. v1.2.3 or 1.2.3)
-          TAG_NAME="${{ github.event.release.tag_name }}"
           # Strip leading 'v' if present
           VERSION="${TAG_NAME#v}"
-          
+
           # Update the version field in manifest.json
           jq --arg ver "$VERSION" '.version = $ver' custom_components/pulse_eight_neo/manifest.json > tmp.json
           mv tmp.json custom_components/pulse_eight_neo/manifest.json
@@ -35,3 +35,10 @@ jobs:
           git add custom_components/pulse_eight_neo/manifest.json
           git commit -m "chore: update manifest.json to $TAG_NAME [skip ci]"
           git push
+
+      - name: Move Tag to Updated Commit
+        run: |
+          # Re-point the release tag at the new commit so the release
+          # source archive includes the manifest version bump.
+          git tag -f "$TAG_NAME" HEAD
+          git push origin "refs/tags/$TAG_NAME" --force
